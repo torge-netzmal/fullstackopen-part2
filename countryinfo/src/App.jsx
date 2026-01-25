@@ -34,7 +34,9 @@ function App() {
                 {countriesToShow.length > 10 ? <p>Too many matches, specify another filter</p> : ""}
                 {countriesToShow.length === 0 ? <p>No country found, specify another filter</p> : ""}
                 {((countriesToShow.length < 10) && (countriesToShow.length > 1)) ?
-                    <ul>{countriesToShow.map((country) => <li key={country.cca3}>{country.name.common}</li>)}</ul> : ""}
+                    <ul>{countriesToShow.map((country) => <li key={country.cca3}>{country.name.common}
+                        <button onClick={() => setCountriesToShow([country])} key={"btn" + country.cca3}>Show</button>
+                    </li>)}</ul> : ""}
                 {countriesToShow.length === 1 ? <Country country={countriesToShow[0]}/> : ""}
             </div>
         </>
