@@ -3,6 +3,7 @@ import Filter from "./components/Filter.jsx";
 import countriesService from "./services/countries.js";
 import Country from "./components/Country.jsx";
 
+
 function App() {
 
     const [countries, setCountries] = useState(null)
@@ -17,15 +18,12 @@ function App() {
     const handleFilterChange = (event) => {
         const name = event.target.value
         setNewFilter(name)
-        console.log(name)
         const filteredCountries = countries.filter(country => {
             return country.name.common.toLowerCase().includes(name.toLowerCase())
         })
 
-        console.log(filteredCountries)
         setCountriesToShow(filteredCountries)
     }
-
 
     return (
         <>
