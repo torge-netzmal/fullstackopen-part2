@@ -11,6 +11,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
     const [successMessage, setSuccessMessage] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(null)
 
     useEffect(() => {
         console.log('effect')
@@ -43,6 +44,15 @@ const App = () => {
                             setSuccessMessage(null)
                         }, 5000)
                     })
+                    .catch(() => {
+                        setErrorMessage(
+                            `Information of ${existingPerson.name} has already been removed from server`
+                        )
+                        setPersons(persons.filter(person => person.id !== existingPerson.id))
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 5000)
+                    })
             }
         } else {
             personsService
@@ -65,14 +75,21 @@ const App = () => {
     const removePerson = (id) => {
         const targetPerson = persons.find(person => person.id === id)
         if (window.confirm(`Delete ${targetPerson.name}?`)) {
-            personsService.remove(id).then(() => {
-                    setPersons(persons.filter(person => person.id !== id))
-                }
-            ).catch(() => {
-                    alert(`${targetPerson.name} does not exist`)
-                    setPersons(persons.filter(person => person.id !== id))
-                }
-            )
+            personsService.remove(id)
+                .then(() => {
+                        setPersons(persons.filter(person => person.id !== id))
+                    }
+                )
+                .catch(() => {
+                        setErrorMessage(
+                            `Information of ${targetPerson.name} has already been removed from server`
+                        )
+                        setPersons(persons.filter(person => person.id !== targetPerson.id))
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 5000)
+                    }
+                )
         }
 
     }
@@ -97,6 +114,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={errorMessage} notificationType='error'/>
             <Notification message={successMessage} notificationType='success'/>
 
             <Filter
