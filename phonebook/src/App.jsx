@@ -40,6 +40,21 @@ const App = () => {
         setNewNumber('')
     }
 
+    const removePerson = (id) => {
+        const targetPerson = persons.find(person => person.id === id)
+        if (window.confirm(`Delete ${targetPerson.name}?`)) {
+            personsService.remove(id).then(() => {
+                    setPersons(persons.filter(person => person.id !== id))
+                }
+            ).catch(() => {
+                    alert(`${targetPerson.name} does not exist`)
+                    setPersons(persons.filter(person => person.id !== id))
+                }
+            )
+        }
+
+    }
+
     const handleNameChange = (event) => {
         console.log(event.target.value)
         setNewName(event.target.value)
@@ -76,7 +91,7 @@ const App = () => {
             />
 
             <h2>Numbers</h2>
-            <Persons persons={filteredPersons}/>
+            <Persons persons={filteredPersons} removePerson={removePerson}/>
         </div>
     )
 }
