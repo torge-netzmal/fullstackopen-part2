@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import Notification from './components/Notification'
 
 const App = () => {
-    const [notes, setNotes] = useState([])
+    const [notes, setNotes] = useState(null)
     const [newNote, setNewNote] = useState('')
     const [showAll, setShowAll] = useState(true)
     const [errorMessage, setErrorMessage] = useState(null)
@@ -17,7 +17,6 @@ const App = () => {
                 setNotes(initialNotes)
             })
     }, [])
-    console.log('render', notes.length, 'notes')
 
     const toggleImportanceOf = (id) => {
         const note = notes.find(n => n.id === id)
@@ -60,6 +59,10 @@ const App = () => {
     const handleNoteChange = (event) => {
         console.log(event.target.value)
         setNewNote(event.target.value)
+    }
+
+    if (!notes) {
+        return null
     }
 
     return (
