@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import Persons from './components/Persons.jsx'
 import PersonForm from "./components/PersonForm.jsx";
 import Filter from "./components/Filter.jsx";
+import Notification from './components/Notification'
 import personsService from "./services/persons"
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
+    const [successMessage, setSuccessMessage] = useState(null)
 
     useEffect(() => {
         console.log('effect')
@@ -34,6 +36,12 @@ const App = () => {
                     .update(existingPerson.id, personObject)
                     .then((returnedPerson) => {
                         setPersons(persons.map((person) => person.id === returnedPerson.id ? returnedPerson : person))
+                        setSuccessMessage(
+                            `Changed number of ${personObject.name}`
+                        )
+                        setTimeout(() => {
+                            setSuccessMessage(null)
+                        }, 5000)
                     })
             }
         } else {
@@ -41,6 +49,12 @@ const App = () => {
                 .create(personObject)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
+                    setSuccessMessage(
+                        `Added ${personObject.name}`
+                    )
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 5000)
                 })
         }
 
@@ -83,6 +97,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={successMessage} notificationType='success'/>
 
             <Filter
                 handleFilterChange={handleFilterChange}
